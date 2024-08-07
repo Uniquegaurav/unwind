@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
 
         // Initialize Places API
         if (!com.google.android.libraries.places.api.Places.isInitialized()) {
-            com.google.android.libraries.places.api.Places.initialize(applicationContext, "AIzaSyBUk4Y5DUBK3ms2VH6P6eKAko9e0dvwAng")
+            com.google.android.libraries.places.api.Places.initialize(applicationContext, "")
         }
         placesClient = com.google.android.libraries.places.api.Places.createClient(this)
 
