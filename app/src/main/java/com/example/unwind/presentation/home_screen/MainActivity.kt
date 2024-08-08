@@ -5,6 +5,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.platform.LocalContext
+import com.example.unwind.common.Constants
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.example.unwind.presentation.common_components.PlacesSearchApp
 
@@ -15,7 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         if (!com.google.android.libraries.places.api.Places.isInitialized()) {
-            com.google.android.libraries.places.api.Places.initialize(applicationContext, "AIzaSyBUk4Y5DUBK3ms2VH6P6eKAko9e0dvwAng")
+            com.google.android.libraries.places.api.Places.initialize(applicationContext, Constants.API_KEY)
         }
         placesClient = com.google.android.libraries.places.api.Places.createClient(this)
 

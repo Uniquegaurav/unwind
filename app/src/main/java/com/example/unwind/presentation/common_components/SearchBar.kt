@@ -20,8 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.unwind.domain.use_cases.place_api.GetSearchedPlacesUseCase
 import com.google.android.libraries.places.api.model.AutocompletePrediction
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 
 
@@ -36,11 +36,12 @@ fun PlacesSearchApp(placesClient: PlacesClient) {
             .padding(16.dp)
     ) {
         OutlinedTextField(
+            singleLine = true,
             value = query,
             onValueChange = { newQuery ->
                 query = newQuery
                 if (newQuery.isNotEmpty()) {
-                    searchPlaces(placesClient, newQuery) { results ->
+                    GetSearchedPlacesUseCase.searchPlaces(placesClient, newQuery) { results ->
                         placeResults = results
                     }
                 } else {
@@ -61,7 +62,13 @@ fun PlacesSearchApp(placesClient: PlacesClient) {
                         .fillMaxWidth()
                         .padding(8.dp)
                         .clickable {
-                            Toast.makeText(context, "Clicked on ${prediction.getPrimaryText(null)}", Toast.LENGTH_SHORT).show()
+                            Toast
+                                .makeText(
+                                    context,
+                                    "Clicked on ${prediction.getPrimaryText(null)}",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
                         }
                 )
             }
@@ -69,18 +76,4 @@ fun PlacesSearchApp(placesClient: PlacesClient) {
     }
 }
 
-private fun searchPlaces(placesClient: PlacesClient, query: String, onResult: (List<AutocompletePrediction>) -> Unit) {
-    val request = FindAutocompletePredictionsRequest.builder()
-        .setQuery(query)
-        .build()
 
-    placesClient.findAutocompletePredictions(request)
-        .addOnSuccessListener { response ->
-            val predictions = response.autocompletePredictions
-            onResult(predictions)
-        }
-        .addOnFailureListener { exception ->
-            exception.printStackTrace()
-            onResult(emptyList())
-        }
-}
